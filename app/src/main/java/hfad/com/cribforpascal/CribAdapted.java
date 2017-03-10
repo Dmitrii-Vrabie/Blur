@@ -18,11 +18,10 @@ import hfad.com.cribforpascal.data.CribForPascalContract;
 public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder>{
     private Context mContext;
     private Cursor mCursor;
-    private TextView mStatementView;
 
-    public CribAdapted(Context context, Cursor cursor){
-        this.mContext = context;
+    public CribAdapted(Context context,Cursor cursor){
         this.mCursor = cursor;
+        this.mContext = context;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent detailIntent = new Intent(v.getContext(), DetailActivity.class);
-
+                detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 detailIntent.putExtra("statementText", statement);
                 mContext.startActivity(detailIntent);
             }
