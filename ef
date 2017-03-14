@@ -1,0 +1,49 @@
+[1mdiff --git a/app/src/main/java/hfad/com/cribforpascal/MainActivity.java b/app/src/main/java/hfad/com/cribforpascal/MainActivity.java[m
+[1mindex 37596d0..bb098b3 100644[m
+[1m--- a/app/src/main/java/hfad/com/cribforpascal/MainActivity.java[m
+[1m+++ b/app/src/main/java/hfad/com/cribforpascal/MainActivity.java[m
+[36m@@ -5,6 +5,8 @@[m [mimport android.database.Cursor;[m
+ import android.database.sqlite.SQLiteDatabase;[m
+ import android.os.AsyncTask;[m
+ import android.os.Bundle;[m
+[32m+[m[32mimport android.support.v4.content.AsyncTaskLoader;[m
+[32m+[m[32mimport android.support.v4.content.CursorLoader;[m
+ import android.support.v7.app.AppCompatActivity;[m
+ import android.support.v7.widget.LinearLayoutManager;[m
+ import android.support.v7.widget.RecyclerView;[m
+[36m@@ -33,24 +35,25 @@[m [mpublic class MainActivity extends AppCompatActivity{[m
+         CribForPascalDBHelper dbHelper = new CribForPascalDBHelper(this);[m
+         mDatabase = dbHelper.getWritableDatabase();[m
+         CribUtil.DataForCrib(mDatabase);[m
+[31m-        new FetchCribData().execute();[m
+     }[m
+ [m
+[31m-    public class FetchCribData extends AsyncTask<Void, Void, Cursor>{[m
+[32m+[m[32m    public class FetchCribData extends CursorLoader {[m
+         Context context = getBaseContext();[m
+[31m-        @Override[m
+[31m-        protected void onPostExecute(Cursor cursor) {[m
+[31m-            super.onPostExecute(cursor);[m
+[31m-            mAdapter = new CribAdapted(context, cursor);[m
+[31m-            mRecyclerView.setAdapter(mAdapter);[m
+[32m+[m
+[32m+[m[32m        public FetchCribData(Context context) {[m
+[32m+[m[32m            super(context);[m
+         }[m
+ [m
+         @Override[m
+[31m-        protected Cursor doInBackground(Void... params) {[m
+[32m+[m[32m        public void deliverResult(Cursor cursor) {[m
+[32m+[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        @Override[m
+[32m+[m[32m        public Cursor loadInBackground() {[m
+             Cursor cursor = null;[m
+             cursor = mDatabase.rawQuery("select statement from crib", null);[m
+             return cursor;[m
+[31m-          }[m
+[31m-[m
+[32m+[m[32m        }[m
+     }[m
+ }[m

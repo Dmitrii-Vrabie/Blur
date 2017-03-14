@@ -19,6 +19,13 @@ public class MainActivity extends AppCompatActivity{
     private RecyclerView.Adapter mAdapter;
     private SQLiteDatabase mDatabase;
     private static final String TAG = "MyActivity";
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDatabase.close();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +44,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public class FetchCribData extends AsyncTask<Void, Void, Cursor>{
-        Context context = getBaseContext();
         @Override
         protected void onPostExecute(Cursor cursor) {
             super.onPostExecute(cursor);
-            mAdapter = new CribAdapted(context, cursor);
+            mAdapter = new CribAdapted(getBaseContext(), cursor);
             mRecyclerView.setAdapter(mAdapter);
         }
 
