@@ -31,8 +31,8 @@ public class DetailActivity extends AppCompatActivity {
         {
             do
             {
-                String path = cursor.getString(0);
-                mDetailView.setText(path);
+                String statementDescription = cursor.getString(0);
+                mDetailView.setText(statementDescription);
             } while (cursor.moveToNext());
         }
         cursor.close();

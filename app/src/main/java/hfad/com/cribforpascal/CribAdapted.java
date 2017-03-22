@@ -15,12 +15,11 @@ import hfad.com.cribforpascal.data.CribForPascalContract;
  * Created by Mephisto on 3/4/2017.
  */
 
-public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder>{
+public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder> {
     private Context mContext;
     private Cursor mCursor;
 
-    public CribAdapted(Context context,Cursor cursor){
-        this.mCursor = cursor;
+    public CribAdapted(Context context) {
         this.mContext = context;
     }
 
@@ -33,12 +32,12 @@ public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder>{
 
     @Override
     public void onBindViewHolder(CribAdapted.ViewHolder holder, int position) {
-        if(!mCursor.moveToPosition(position)){
+        if (!mCursor.moveToPosition(position)) {
             return;
         }
         final String statement = mCursor.getString(mCursor.getColumnIndex(CribForPascalContract.CribForPascalEntry.COLUMN_STATEMENT));
         holder.mStatementView.setText(statement);
-        holder.mStatementView.setOnClickListener(new View.OnClickListener(){
+        holder.mStatementView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent detailIntent = new Intent(v.getContext(), DetailActivity.class);
@@ -54,14 +53,30 @@ public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder>{
     public int getItemCount() {
         return mCursor.getCount();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mStatementView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mStatementView = (TextView)itemView.findViewById(R.id.tv_statement);
+            mStatementView = (TextView) itemView.findViewById(R.id.tv_statement);
         }
+    }
+
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (mCursor == c) {
+            return null; // bc nothing has changed
+        }
+        Cursor temp = mCursor;
+        this.mCursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
 }
