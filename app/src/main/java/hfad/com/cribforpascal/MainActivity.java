@@ -97,4 +97,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onDestroy();
         mDatabase.close();
     }
+
 }
