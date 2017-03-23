@@ -1,9 +1,7 @@
 package hfad.com.cribforpascal;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -18,14 +16,13 @@ import hfad.com.cribforpascal.data.CribForPascalDBHelper;
 import hfad.com.cribforpascal.data.CribUtil;
 
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private RecyclerView mRecyclerView;
     public static final int TASK_LOADER_ID = 0;
     private RecyclerView.LayoutManager mLayoutManager;
     private CribAdapted mAdapter;
     private SQLiteDatabase mDatabase;
     private static final String TAG = "MyActivity";
-
 
 
     @Override
@@ -41,12 +38,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setAdapter(mAdapter);
 
 
-
         CribForPascalDBHelper dbHelper = new CribForPascalDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
         CribUtil.DataForCrib(mDatabase);
         getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);
-        //new FetchCribData().execute();
     }
 
     @Override
@@ -86,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         };
     }
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
@@ -95,27 +91,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mDatabase.close();
     }
 }
-/*
-
-public class FetchCribData extends AsyncTask<Void, Void, Cursor>{
-    @Override
-    protected void onPostExecute(Cursor cursor) {
-        super.onPostExecute(cursor);
-        mAdapter = new CribAdapted(getBaseContext(), cursor);
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    @Override
-    protected Cursor doInBackground(Void... params) {
-        Cursor cursor = null;
-        cursor = mDatabase.rawQuery("select statement from crib", null);
-        return cursor;
-    }
-
-}*/

@@ -40,8 +40,7 @@ public class CribAdapted extends RecyclerView.Adapter<CribAdapted.ViewHolder> {
         holder.mStatementView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent detailIntent = new Intent(v.getContext(), DetailActivity.class);
-                detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent detailIntent = new Intent(v.getContext(), TabbedActivity.class);
                 detailIntent.putExtra("statementText", statement);
                 mContext.startActivity(detailIntent);
             }
