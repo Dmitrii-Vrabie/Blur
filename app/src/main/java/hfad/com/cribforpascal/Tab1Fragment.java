@@ -60,8 +60,6 @@ public class Tab1Fragment extends Fragment implements LoaderManager.LoaderCallba
                 tvDescription.setText(statementDescription);
             } while (mDescrioptionCursor.moveToNext());
         }
-        mDescrioptionCursor.close();
-
     }
 
     @Override
