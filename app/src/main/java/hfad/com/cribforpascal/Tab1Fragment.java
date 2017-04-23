@@ -7,12 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import hfad.com.cribforpascal.data.CribForPascalContract;
 import hfad.com.cribforpascal.data.CribForPascalDBHelper;
 
 /**
@@ -26,25 +26,31 @@ public class Tab1Fragment extends Fragment {
     private SQLiteDatabase mDatabase;
     public static final int DESCRIPTION_LOADER = 1;
     private TextView tvDescription;
+    private TextView tvTitle;
     private String statementDescription;
+    private AsyncLoading mAsyncLoading;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CribForPascalDBHelper dbHelper = new CribForPascalDBHelper(getContext());
+        CribForPascalDBHelper dbHelper = CribForPascalDBHelper.getInstance(getContext());
         mDatabase = dbHelper.getReadableDatabase();
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new AsyncLoading().execute();
+        mAsyncLoading = new AsyncLoading();
+        mAsyncLoading.execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_one, container, false);
-        tvDescription = (TextView)rootView.findViewById(R.id.tv_description_fragment);
+        tvDescription = (TextView) rootView.findViewById(R.id.tv_description_fragment);
+        tvTitle = (TextView) rootView.findViewById(R.id.tv_tab1_title);
+        tvTitle.setText(textForDescription());
         return rootView;
     }
 
@@ -54,33 +60,32 @@ public class Tab1Fragment extends Fragment {
         @Override
         protected Cursor doInBackground(Void... params) {
             String statementText = textForDescription();
-            Log.i(TAG, "doInBackground: " + statementText);
-            return mDatabase.rawQuery("select description from crib where statement = ?", new String[] { statementText});
+            return mDatabase.query(
+                    CribForPascalContract.CribForPascalEntry.TABLE_NAME,
+                    new String[]{CribForPascalContract.CribForPascalEntry.COLUMN_DESCRIPTION},
+                    CribForPascalContract.CribForPascalEntry.COLUMN_STATEMENT + "=?",
+                    new String[]{statementText},
+                    null,
+                    null,
+                    null
+            );
         }
 
         @Override
         protected void onPostExecute(Cursor cursor) {
             mDescrioptionCursor = cursor;
-           if( mDescrioptionCursor.moveToFirst()){
-               do {
-                   String data = mDescrioptionCursor.getString(0);
-                   tvDescription.setText(data);
-               } while (mDescrioptionCursor.moveToNext());
-           }
+            if (mDescrioptionCursor.moveToFirst()) {
+                do {
+                    String data = mDescrioptionCursor.getString(0);
+                    tvDescription.setText(data);
+                } while (mDescrioptionCursor.moveToNext());
+            }
         }
     }
 
     private String textForDescription() {
         Intent intent = getActivity().getIntent();
         String description = intent.getStringExtra(STATEMENT_KEY);
-        Log.i(TAG, "textForDescription: " + description);
         return description;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mDescrioptionCursor.close();
-        mDatabase.close();
     }
 }

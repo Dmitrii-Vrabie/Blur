@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setAdapter(mAdapter);
 
 
-        CribForPascalDBHelper dbHelper = new CribForPascalDBHelper(this);
+        CribForPascalDBHelper dbHelper = CribForPascalDBHelper.getInstance(getApplicationContext());
         mDatabase = dbHelper.getWritableDatabase();
         CribUtil.DataForCrib(mDatabase);
         getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, this);

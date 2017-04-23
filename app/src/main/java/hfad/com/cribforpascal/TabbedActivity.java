@@ -1,8 +1,6 @@
 package hfad.com.cribforpascal;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 public class TabbedActivity extends AppCompatActivity {
 
@@ -92,17 +89,24 @@ public class TabbedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
+
                     Tab1Fragment tab1Fragment = new Tab1Fragment();
-                    return tab1Fragment;
+//                    if (tab1Fragment.getChildFragmentManager().findFragmentById(R.id.fragment_one)!=null) {
+                        return tab1Fragment;
+//                    }
+
                 case 1:
                     Tab2Fragment tab2Fragment = new Tab2Fragment();
                     return tab2Fragment;
+
                 case 2:
                     Tab3Fragment tab3Fragment = new Tab3Fragment();
                     return tab3Fragment;
+
                 default:
                     return null;
             }
+
         }
 
         @Override

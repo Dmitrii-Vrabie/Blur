@@ -9,9 +9,18 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class CribForPascalDBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "crib.db";
-    private static final int DATABASE_VERSION = 2;
+    private static CribForPascalDBHelper mInstance = null;
 
+    private static final String DATABASE_NAME = "crib.db";
+    private static final int DATABASE_VERSION = 5;
+
+
+    public static CribForPascalDBHelper getInstance(Context context){
+        if (mInstance == null){
+            mInstance = new CribForPascalDBHelper(context.getApplicationContext());
+        }
+        return mInstance;
+    }
     public CribForPascalDBHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -22,7 +31,10 @@ public class CribForPascalDBHelper extends SQLiteOpenHelper {
                 CribForPascalContract.CribForPascalEntry.TABLE_NAME + " (" +
                 CribForPascalContract.CribForPascalEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 CribForPascalContract.CribForPascalEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                CribForPascalContract.CribForPascalEntry.COLUMN_STATEMENT + " TEXT NOT NULL" + "); ";
+                CribForPascalContract.CribForPascalEntry.COLUMN_STATEMENT + " TEXT NOT NULL, " +
+                CribForPascalContract.CribForPascalEntry.COLUMN_STEP_BY_STEP + " TEXT NOT NULL, " +
+                CribForPascalContract.CribForPascalEntry.COLUMN_EXERICISE + " TEXT NOT NULL, " +
+                CribForPascalContract.CribForPascalEntry.COLUMN_ANSWER  + ");";
         db.execSQL(SQL_CREATE_CRIB_TABLE);
     }
 
